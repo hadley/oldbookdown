@@ -1,0 +1,41 @@
+#' @export
+html_chapter <- function() {
+  base <- rmarkdown::html_document()
+  base$knitr <- knitr_opts("html")
+  base
+}
+
+#' @export
+pdf_chapter <- function(toc = FALSE, book = FALSE) {
+  base <- rmarkdown::pdf_document(
+    keep_tex = TRUE,
+    template = system.file("book-template.tex", package = "bookdown"),
+    latex_engine = "xelatex"
+  )
+  base$knitr <- knitr_opts("tex")
+  base
+}
+
+knitr_opts <- function(type = c("html", "tex")) {
+  type <- match.arg(type)
+
+  chunk <- list(
+    comment = "#>",
+    collapse = TRUE,
+    error = FALSE,
+    cache.path = "_cache/",
+    fig.width = 4,
+    fig.height = 4
+  )
+  if (type == "html") {
+    chunk$dev <- "png"
+    chunk$dpi <- 96
+    chunk$fig.retina <- 2
+  } else {
+    chunk$dev <- "pdf"
+    chunk$dpi <- 96
+    chunk$fig.retina <- 2
+  }
+
+  rmarkdown::knitr_options(opts_chunk = chunk)
+}
