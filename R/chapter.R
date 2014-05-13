@@ -1,5 +1,7 @@
 #' @export
 html_chapter <- function() {
+  library(bookdown)
+
   base <- rmarkdown::html_document()
   base$knitr <- knitr_opts("html")
   base
@@ -7,6 +9,8 @@ html_chapter <- function() {
 
 #' @export
 pdf_chapter <- function(toc = FALSE, book = FALSE) {
+  library(bookdown)
+
   base <- rmarkdown::pdf_document(
     keep_tex = TRUE,
     template = system.file("book-template.tex", package = "bookdown"),
