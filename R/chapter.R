@@ -20,6 +20,17 @@ pdf_chapter <- function(toc = FALSE, book = FALSE) {
   base
 }
 
+#' @export
+tex_chapter <- function(toc = FALSE, book = FALSE) {
+  library(bookdown)
+
+  base <- rmarkdown::pdf_document(template = NULL)
+  base$pandoc$ext <- ".tex"
+  base$knitr <- knitr_opts("tex")
+
+  base
+}
+
 knitr_opts <- function(type = c("html", "tex")) {
   type <- match.arg(type)
 
@@ -37,8 +48,6 @@ knitr_opts <- function(type = c("html", "tex")) {
     chunk$fig.retina <- 2
   } else {
     chunk$dev <- "pdf"
-    chunk$dpi <- 96
-    chunk$fig.retina <- 2
   }
 
   rmarkdown::knitr_options(opts_chunk = chunk)
