@@ -1,4 +1,3 @@
-
 #' @export
 index <- function() {
   rmd <- dir(pattern = "\\.rmd$")
@@ -11,8 +10,8 @@ index <- function() {
 }
 
 #' @export
-check_file <- function(path) {
-  index <- readRDS("toc.rds")
+check_links <- function(path, index_path = "toc.rds") {
+  index <- readRDS(index_path)
   body <- parse_md(path)[[2]]
 
   get_link <- function(type, contents, format, meta) {
@@ -28,6 +27,30 @@ check_file <- function(path) {
   }
   lapply(gsub("^#", "", links_by_type$internal), lookup, index)
   invisible()
+}
+
+# Convert internal links to explicit links also containing the file name
+#' @export
+update_links <- function(path, index_path = "toc.rds") {
+  index <- readRDS(index_path)
+
+  contents <- paste0(readLines(path, warn = FALSE), collapse = "\n")
+
+  int_link_pos <- str_locate_all(contents, "\\(#([^)]*)\\)")[[1]]
+  int_link <- str_sub(contents,
+    int_link_pos[, "start"] + 2, # (#
+    int_link_pos[, "end"] - 1    # )
+  )
+
+  replacement <- vapply(int_link, lookup, character(1), index = index)
+
+  for(i in rev(seq_len(nrow(int_link_pos)))) {
+    start <- int_link_pos[i, "start"] + 1
+    end <- int_link_pos[i, "end"] - 1
+    str_sub(contents, start, end) <- replacement[i]
+  }
+
+  writeLines(contents, path)
 }
 
 
