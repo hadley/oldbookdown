@@ -21,11 +21,12 @@ pdf_chapter <- function(toc = FALSE, book = FALSE) {
 }
 
 #' @export
-md_chapter <- function(type = c("html", "tex")) {
+tex_chapter <- function(toc = FALSE, book = FALSE) {
   library(bookdown)
 
-  base <- rmarkdown::md_document(preserve_yaml = TRUE)
-  base$knitr <- knitr_opts(type)
+  base <- rmarkdown::pdf_document(template = NULL)
+  base$pandoc$ext <- ".tex"
+  base$knitr <- knitr_opts("tex")
 
   base
 }
