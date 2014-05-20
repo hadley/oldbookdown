@@ -36,8 +36,8 @@ update_links <- function(path, index_path = "toc.rds") {
 
   contents <- paste0(readLines(path, warn = FALSE), collapse = "\n")
 
-  int_link_pos <- str_locate_all(contents, "\\(#([^)]*)\\)")[[1]]
-  int_link <- str_sub(contents,
+  int_link_pos <- stringr::str_locate_all(contents, "\\(#([^)]*)\\)")[[1]]
+  int_link <- stringr::str_sub(contents,
     int_link_pos[, "start"] + 2, # (#
     int_link_pos[, "end"] - 1    # )
   )
@@ -47,7 +47,7 @@ update_links <- function(path, index_path = "toc.rds") {
   for(i in rev(seq_len(nrow(int_link_pos)))) {
     start <- int_link_pos[i, "start"] + 1
     end <- int_link_pos[i, "end"] - 1
-    str_sub(contents, start, end) <- replacement[i]
+    stringr::str_sub(contents, start, end) <- replacement[i]
   }
 
   writeLines(contents, path)

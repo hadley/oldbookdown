@@ -8,6 +8,7 @@ Depends:
 Imports:
     rmarkdown,
     RJSONIO,
-    yaml
+    yaml,
+    stringr
 License: GPL-3
 LazyData: true

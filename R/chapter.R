@@ -1,5 +1,5 @@
 #' @export
-html_chapter <- function(raw = FALSE) {
+html_chapter <- function(raw = FALSE, toc = NULL) {
   library(bookdown)
 
   base <- rmarkdown::html_document(
@@ -8,6 +8,13 @@ html_chapter <- function(raw = FALSE) {
     template = if (raw) system.file("raw-html.html", package = "bookdown") else "default",
     mathjax = if (raw) NULL else "default"
   )
+  if (!is.null(toc)) {
+    base$pre_processor <- function(yaml_front_matter, utf8_input, runtime,
+                                  knit_meta, files_dir, output_dir) {
+      update_links(utf8_input, toc)
+    }
+  }
+
   base$knitr <- knitr_opts("html")
   base
 }
