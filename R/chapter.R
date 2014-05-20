@@ -24,7 +24,11 @@ pdf_chapter <- function(toc = FALSE, book = FALSE) {
 tex_chapter <- function(toc = FALSE, book = FALSE) {
   library(bookdown)
 
-  base <- rmarkdown::pdf_document(template = NULL)
+  base <- rmarkdown::pdf_document(
+    template = NULL,
+    latex_engine = "xelatex",
+    pandoc_args = c("--chapters")
+  )
   base$pandoc$ext <- ".tex"
   base$knitr <- knitr_opts("tex")
 
@@ -39,6 +43,7 @@ knitr_opts <- function(type = c("html", "tex")) {
     collapse = TRUE,
     error = FALSE,
     cache.path = "_cache/",
+    fig.path = "figures/",
     fig.width = 4,
     fig.height = 4
   )
