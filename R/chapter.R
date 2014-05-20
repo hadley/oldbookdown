@@ -8,6 +8,9 @@ html_chapter <- function(raw = FALSE, toc = NULL) {
     template = if (raw) system.file("raw-html.html", package = "bookdown") else "default",
     mathjax = if (raw) NULL else "default"
   )
+  # Remove --section-divs option
+  base$pandoc$args <- setdiff(base$pandoc$args, "--section-divs")
+
   if (!is.null(toc)) {
     base$pre_processor <- function(yaml_front_matter, utf8_input, runtime,
                                   knit_meta, files_dir, output_dir) {
