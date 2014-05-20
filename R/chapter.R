@@ -1,8 +1,13 @@
 #' @export
-html_chapter <- function() {
+html_chapter <- function(raw = FALSE) {
   library(bookdown)
 
-  base <- rmarkdown::html_document()
+  base <- rmarkdown::html_document(
+    self_contained = FALSE,
+    lib_dir = "www",
+    template = if (raw) system.file("raw-html.html", package = "bookdown") else "default",
+    mathjax = if (raw) NULL else "default"
+  )
   base$knitr <- knitr_opts("html")
   base
 }
@@ -34,6 +39,7 @@ tex_chapter <- function(toc = FALSE, book = FALSE) {
 
   base
 }
+
 
 knitr_opts <- function(type = c("html", "tex")) {
   type <- match.arg(type)
