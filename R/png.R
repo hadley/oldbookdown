@@ -2,29 +2,19 @@
 embed_png <- function(path, dpi = NULL) {
   meta <- attr(png::readPNG(path, native = TRUE, info = TRUE), "info")
   if (!is.null(dpi)) meta$dpi <- rep(dpi, 2)
-  meta$path <- path
-
-  structure(meta, class = "png")
-}
-
-#' @export
-knit_print.png <- function(x, options) {
-  # To get more formatting info, see:
-  # opts_knit$get('rmarkdown.pandoc.to')
-  # opts_knit$get('out.format')
 
   if (identical(doc_type(), "latex")) {
     knitr::asis_output(paste0(
       "\\includegraphics[",
-      "width=", round(x$dim[1] / x$dpi[1], 2), "in,",
-      "height=", round(x$dim[2] / x$dpi[2], 2), "in",
-      "]{", x$path, "}"
+      "width=", round(meta$dim[1] / meta$dpi[1], 2), "in,",
+      "height=", round(meta$dim[2] / meta$dpi[2], 2), "in",
+      "]{", path, "}"
     ))
   } else {
     knitr::asis_output(paste0(
-      "<img src='", x$path, "'",
-      " width=", x$dim[1] / (x$dpi[1] / 96),
-      " height=", x$dim[2] / (x$dpi[2] / 96),
+      "<img src='", path, "'",
+      " width=", round(meta$dim[1] / (meta$dpi[1] / 96)),
+      " height=", round(meta$dim[2] / (meta$dpi[2] / 96)),
       " />"
     ))
   }
