@@ -27,9 +27,9 @@ pdf_chapter <- function(toc = FALSE, book = FALSE) {
   library(bookdown)
 
   base <- rmarkdown::pdf_document(
-    keep_tex = TRUE,
     template = system.file("book-template.tex", package = "bookdown"),
-    latex_engine = "xelatex"
+    latex_engine = "xelatex",
+    pandoc_args = c("--chapters")
   )
   base$knitr <- knitr_opts("tex")
   base
