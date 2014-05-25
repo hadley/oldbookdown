@@ -5,7 +5,7 @@ html_chapter <- function(raw = FALSE, toc = NULL) {
   base <- rmarkdown::html_document(
     self_contained = FALSE,
     lib_dir = "www",
-    template = if (raw) system.file("raw-html.html", package = "bookdown") else "default",
+    template = if (raw) system.file("raw-html.html", package = "bookdown") else system.file("chapter-html.html", package = "bookdown"),
     mathjax = if (raw) NULL else "default"
   )
   # Remove --section-divs option
