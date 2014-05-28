@@ -68,7 +68,7 @@ knitr_opts <- function(type = c("html", "tex")) {
     chunk$dpi <- 96
     chunk$fig.retina <- 2
   } else {
-    chunk$dev <- "pdf"
+    chunk$dev <- "cairo_pdf"
   }
 
   rmarkdown::knitr_options(opts_chunk = chunk)
