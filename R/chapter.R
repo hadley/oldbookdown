@@ -58,6 +58,7 @@ markdown_style <- "markdown+autolink_bare_uris-auto_identifiers+tex_math_single_
 knitr_opts <- function(type = c("html", "tex")) {
   type <- match.arg(type)
 
+  pkg <- list()
   chunk <- list(
     comment = "#>",
     collapse = TRUE,
@@ -72,8 +73,9 @@ knitr_opts <- function(type = c("html", "tex")) {
     chunk$dpi <- 96
     chunk$fig.retina <- 2
   } else {
+    pkg$width <- 65 - 3
     chunk$dev <- "cairo_pdf"
   }
 
-  rmarkdown::knitr_options(opts_chunk = chunk)
+  rmarkdown::knitr_options(pkg, chunk)
 }
