@@ -66,16 +66,26 @@ knitr_opts <- function(type = c("html", "tex")) {
     cache.path = "_cache/",
     fig.path = "figures/",
     fig.width = 4,
-    fig.height = 4
+    fig.height = 4,
+    dev.args = list(pointsize = 10)
   )
+
+
   if (type == "html") {
     chunk$dev <- "png"
     chunk$dpi <- 96
     chunk$fig.retina <- 2
   } else {
     pkg$width <- 65 - 3
-    chunk$dev <- "cairo_pdf"
+
+    chunk$dev <- "pdf"
   }
 
-  rmarkdown::knitr_options(pkg, chunk)
+  hooks <- list(
+    small_mar = function(before, options, envir) {
+      if (before) par(mar = c(4.1, 4.1, 0.5, 0.5))
+    }
+  )
+
+  rmarkdown::knitr_options(pkg, chunk, hooks)
 }
