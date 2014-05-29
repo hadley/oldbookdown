@@ -10,6 +10,7 @@ html_chapter <- function(raw = FALSE, toc = NULL) {
   )
   # Remove --section-divs option
   base$pandoc$args <- setdiff(base$pandoc$args, "--section-divs")
+  base$from <- markdown_style
 
   if (!is.null(toc)) {
     base$pre_processor <- function(yaml_front_matter, utf8_input, runtime,
@@ -31,6 +32,7 @@ pdf_chapter <- function(toc = FALSE, book = FALSE) {
     latex_engine = "xelatex",
     pandoc_args = c("--chapters")
   )
+  base$from <- markdown_style
   base$knitr <- knitr_opts("tex")
   base
 }
@@ -42,14 +44,16 @@ tex_chapter <- function(toc = FALSE, book = FALSE) {
   base <- rmarkdown::pdf_document(
     template = NULL,
     latex_engine = "xelatex",
-    pandoc_args = c("--chapters")
+    pandoc_args = c("--chapters", "")
   )
+  base$from <- markdown_style
   base$pandoc$ext <- ".tex"
   base$knitr <- knitr_opts("tex")
 
   base
 }
 
+markdown_style <- "markdown+autolink_bare_uris-auto_identifiers+tex_math_single_backslash-implicit_figures"
 
 knitr_opts <- function(type = c("html", "tex")) {
   type <- match.arg(type)

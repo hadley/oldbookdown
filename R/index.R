@@ -6,7 +6,11 @@ index <- function() {
 
   # Save in human readable and R readable
   cat(yaml::as.yaml(headers), file = "toc.yaml")
-  saveRDS(invert(headers), "toc.rds")
+
+  headers_df <- stack(headers)
+  headers_df$ind <- as.character(headers_df$ind)
+
+  saveRDS(setNames(as.list(headers_df$ind), headers_df$values), "toc.rds")
 }
 
 #' @export
@@ -61,7 +65,7 @@ update_links <- function(path, index_path = "toc.rds") {
 parse_md <- function(in_path) {
   out_path <- tempfile()
   on.exit(unlink(out_path))
-  cmd <- paste0("pandoc -f markdown -t json -o ", out_path, " ", in_path)
+  cmd <- paste0("pandoc -f ", markdown_style, " -t json -o ", out_path, " ", in_path)
   system(cmd)
 
   RJSONIO::fromJSON(out_path, simplify = FALSE)
@@ -76,7 +80,8 @@ extract_headers <- function(in_path) {
   body <- x[[2]]
   headers <- contents(body[type(body) == "Header"])
 
-  vapply(headers, id, FUN.VALUE = character(1))
+  ids <- vapply(headers, id, FUN.VALUE = character(1))
+  ids[ids != ""]
 }
 
 link_type <- function(url) {
