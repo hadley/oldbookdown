@@ -96,7 +96,7 @@ lookup <- function(name, index = readRDS("toc.rds")) {
   if (length(path) == 0) {
     stop("Can't find ref '", name, "'", call. = FALSE)
   } else if (length(path) > 1) {
-    stop("Amibugous ref '", name, "' found in ", paste0(path, collapse = ", "),
+    stop("Ambiguous ref '", name, "' found in ", paste0(path, collapse = ", "),
       call. = FALSE)
   }
 
@@ -162,7 +162,7 @@ walk_inline <- function(x, action, format = NULL, meta = NULL) {
     BulletList = unlist(lapply(x$c, recurse)),
     # Each list item is a pair consisting of a term (a list of inlines) and
     # one or more definitions (each a list of blocks)
-    DefintionList = unlist(lapply(x$c, function(x) recurse(x[[1]]), recurse(x[[2]]))),
+    DefinitionList = unlist(lapply(x$c, function(x) recurse(x[[1]]), recurse(x[[2]]))),
     # Third element is list of inlines
     Header = recurse(x$c[[3]]),
     HorizontalRule = NULL,
