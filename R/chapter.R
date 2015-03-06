@@ -40,6 +40,8 @@ pdf_chapter <- function(toc = FALSE, book = FALSE) {
 #' @export
 tex_chapter <- function(toc = FALSE, book = FALSE) {
   library(bookdown)
+  options(digits = 3)
+  set.seed(1014)
 
   base <- rmarkdown::pdf_document(
     template = NULL,
