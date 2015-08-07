@@ -4,13 +4,18 @@ index <- function() {
   headers <- lapply(rmd, extract_headers)
   names(headers) <- rmd
 
-  # Save in human readable and R readable
-  cat(yaml::as.yaml(headers), file = "toc.yaml")
-
   headers_df <- stack(headers)
   headers_df$ind <- as.character(headers_df$ind)
+  new <- setNames(as.list(headers_df$ind), headers_df$values)
 
-  saveRDS(setNames(as.list(headers_df$ind), headers_df$values), "toc.rds")
+  old <- readRDS("toc.rds")
+  if (identical(old, new)) {
+    return()
+  }
+
+  # Save in human readable and R readable
+  cat(yaml::as.yaml(headers), file = "toc.yaml")
+  saveRDS(new, "toc.rds")
 }
 
 #' @export
