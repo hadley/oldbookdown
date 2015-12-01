@@ -2,6 +2,7 @@
 
 export(begin_sidebar)
 export(check_links)
+export(embed_png)
 export(end_sidebar)
 export(html_chapter)
 export(index)

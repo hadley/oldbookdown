@@ -30,6 +30,10 @@ screenshot <- function(path, dpi = NULL) {
   }
 }
 
+#' @export
+#' @rdname screenshot
+embed_png <- screenshot
+
 png_meta <- function(path) {
   attr(png::readPNG(path, native = TRUE, info = TRUE), "info")
 }

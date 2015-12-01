@@ -1,10 +1,5 @@
 #' @export
 html_chapter <- function(raw = FALSE, toc = NULL, code_width = 80) {
-  output_format(
-    knitr_opts("html"),
-    pandoc = pandoc_options(to = "latex")
-  )
-
   base <- rmarkdown::html_document(
     self_contained = FALSE,
     lib_dir = "www",
