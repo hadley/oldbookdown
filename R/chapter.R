@@ -1,6 +1,9 @@
 #' @export
-html_chapter <- function(raw = FALSE, toc = NULL) {
-  library(bookdown)
+html_chapter <- function(raw = FALSE, toc = NULL, code_width = 80) {
+  output_format(
+    knitr_opts("html"),
+    pandoc = pandoc_options(to = "latex")
+  )
 
   base <- rmarkdown::html_document(
     self_contained = FALSE,
@@ -19,73 +22,62 @@ html_chapter <- function(raw = FALSE, toc = NULL) {
     }
   }
 
-  base$knitr <- knitr_opts("html")
   base
 }
 
 #' @export
-pdf_chapter <- function(toc = FALSE, book = FALSE) {
-  library(bookdown)
-
-  base <- rmarkdown::pdf_document(
-    template = system.file("book-template.tex", package = "bookdown"),
-    latex_engine = "xelatex",
-    pandoc_args = c("--chapters")
-  )
-  base$pandoc$from <- markdown_style
-  base$knitr <- knitr_opts("tex")
-  base
-}
-
-#' @export
-tex_chapter <- function(toc = FALSE, book = FALSE) {
-  library(bookdown)
+tex_chapter <- function(chapter = NULL,
+                        latex_engine = c("xelatex", "pdflatex", "lualatex"),
+                        code_width = 65) {
   options(digits = 3)
   set.seed(1014)
 
-  base <- rmarkdown::pdf_document(
-    template = NULL,
-    latex_engine = "xelatex",
-    pandoc_args = c("--chapters", "")
+  latex_engine <- match.arg(latex_engine)
+  rmarkdown::output_format(
+    knitr_opts("html", chapter),
+    rmarkdown::pandoc_options(
+      to = "latex",
+      from = "markdown_style",
+      ext = ".tex",
+      args = c("--chapters", pandoc_latex_engine_args(latex_engine))
+    ),
+    clean_supporting = FALSE
   )
-  base$pandoc$from <- markdown_style
-  base$pandoc$ext <- ".tex"
-  base$knitr <- knitr_opts("tex")
-
-  base
 }
 
-markdown_style <- "markdown+autolink_bare_uris-auto_identifiers+tex_math_single_backslash-implicit_figures"
+markdown_style <- paste0(
+  "markdown",
+  "+autolink_bare_uris",
+  "-auto_identifiers",
+  "+tex_math_single_backslash",
+  "-implicit_figures"
+)
 
-knitr_opts <- function(type = c("html", "tex")) {
+knitr_opts <- function(type = c("html", "latex"), chapter, code_width = 65) {
   type <- match.arg(type)
 
-  pkg <- list()
+  pkg <- list(
+    width = code_width
+  )
+
   chunk <- list(
     comment = "#>",
     collapse = TRUE,
-    error = FALSE,
-    cache.path = "_cache/",
-    fig.path = "figures/",
+    cache.path = paste0("_cache/", chapter, "/"),
+    cache = TRUE,
+    fig.path = paste0("_figures/", chapter, "/"),
     fig.width = 4,
     fig.height = 4,
-    dev.args = list(pointsize = 10)
+    fig.retina = NULL,
+    dev = if (type == "html") "png" else "pdf",
+    dpi = if (type == "html") 96 else 300
   )
 
-
-  if (type == "html") {
-    chunk$dev <- "png"
-    chunk$dpi <- 96
-    chunk$fig.retina <- 2
-  } else {
-    pkg$width <- 65 - 3
-
-    chunk$dev <- "pdf"
-  }
-
   hooks <- list(
+    plot = if (type == "latex") html_plot(),
     small_mar = function(before, options, envir) {
-      if (before) par(mar = c(4.1, 4.1, 0.5, 0.5))
+      if (before)
+        par(mar = c(4.1, 4.1, 0.5, 0.5))
     }
   )
 

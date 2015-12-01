@@ -1,17 +1,12 @@
 #' @export
 index <- function() {
-  rmd <- dir(pattern = "\\.rmd$")
+  rmd <- dir(pattern = "\\.[rR]md$")
   headers <- lapply(rmd, extract_headers)
   names(headers) <- rmd
 
   headers_df <- stack(headers)
   headers_df$ind <- as.character(headers_df$ind)
   new <- setNames(as.list(headers_df$ind), headers_df$values)
-
-  old <- readRDS("toc.rds")
-  if (identical(old, new)) {
-    return()
-  }
 
   # Save in human readable and R readable
   cat(yaml::as.yaml(headers), file = "toc.yaml")
@@ -39,7 +34,6 @@ check_links <- function(path, index_path = "toc.rds") {
 }
 
 # Convert internal links to explicit links also containing the file name
-#' @export
 update_links <- function(path, index_path = "toc.rds") {
   index <- readRDS(index_path)
 
