@@ -1,3 +1,4 @@
+
 #' @export
 html_chapter <- function(raw = FALSE, toc = NULL, code_width = 80) {
   base <- rmarkdown::html_document(
@@ -10,10 +11,15 @@ html_chapter <- function(raw = FALSE, toc = NULL, code_width = 80) {
   base$pandoc$args <- setdiff(base$pandoc$args, "--section-divs")
   base$pandoc$from <- markdown_style
 
+
+
   if (!is.null(toc)) {
+    old_p <- base$pre_processor
     base$pre_processor <- function(yaml_front_matter, utf8_input, runtime,
-                                  knit_meta, files_dir, output_dir) {
+                                knit_meta, files_dir, output_dir) {
       update_links(utf8_input, toc)
+      old_p(yaml_front_matter, utf8_input, runtime,
+        knit_meta, files_dir, output_dir)
     }
   }
 
