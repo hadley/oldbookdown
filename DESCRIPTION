@@ -1,4 +1,4 @@
-Package: bookdown
+Package: oldbookdown
 Title: What the package does (short line)
 Version: 0.1
 Authors@R: 'Hadley Wickham <h.wickham@gmail.com> [aut,cre]'
@@ -12,4 +12,4 @@ Imports:
     stringr
 License: GPL-3
 LazyData: true
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1
