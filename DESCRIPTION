@@ -9,7 +9,8 @@ Imports:
     rmarkdown,
     RJSONIO,
     yaml,
-    stringr
+    stringr,
+    png
 License: GPL-3
 LazyData: true
 RoxygenNote: 5.0.1
