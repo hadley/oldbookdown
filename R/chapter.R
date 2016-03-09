@@ -40,7 +40,7 @@ tex_chapter <- function(chapter = NULL,
       to = "latex",
       from = "markdown_style",
       ext = ".tex",
-      args = c("--chapters", pandoc_latex_engine_args(latex_engine))
+      args = c("--chapters", rmarkdown::pandoc_latex_engine_args(latex_engine))
     ),
     clean_supporting = FALSE
   )

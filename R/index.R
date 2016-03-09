@@ -170,7 +170,7 @@ walk_inline <- function(x, action, format = NULL, meta = NULL) {
     Table = c(recurse(x$c[[1]]), recurse(x$c[[4]]), unlist(lapply(x$c[[5]], recurse))),
     # Second element is list of blocks
     Div = recurse(x$c[[2]]),
-    Null = Null,
+    Null = NULL,
     # Anything else must be a inline element
     action(x$t, x$c, format = format, meta = meta)
   )
