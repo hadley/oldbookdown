@@ -38,7 +38,7 @@ tex_chapter <- function(chapter = NULL,
     knitr_opts("html", chapter),
     rmarkdown::pandoc_options(
       to = "latex",
-      from = "markdown_style",
+      from = markdown_style,
       ext = ".tex",
       args = c("--chapters", rmarkdown::pandoc_latex_engine_args(latex_engine))
     ),
